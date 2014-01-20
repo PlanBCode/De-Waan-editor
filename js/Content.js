@@ -113,11 +113,18 @@ function Content() {
 	function createFile(fileName,filesDir) {
 		console.log("  addFile: ",fileName);
 		var matches = fileName.match(_fileRegExp);
+		//console.log("  matches: ",matches);
+		
 		var file = new File();
 		file.fileName = fileName;
 		file.path = filesDir+"/"+fileName;
-		file.name = matches[1];
-		file.extension = matches[2];
+		if(matches) {
+			file.name = matches[1];
+			file.extension = matches[2];
+		} else {
+			file.name = fileName;
+			file.extension = "";
+		}
 		file.type = getFileType(file.extension);
 		file.enabled = true;
 		return file;
