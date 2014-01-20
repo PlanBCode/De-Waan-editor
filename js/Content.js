@@ -59,6 +59,9 @@ function Content() {
 					case "disclaimer":
 						disclaimerFile = file;
 						break;
+					case "header":
+						return; //ignore
+						break;
 					default:
 						addFile(file);
 						break;
