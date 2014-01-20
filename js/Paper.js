@@ -1,7 +1,7 @@
 function Paper() {
 
 	var _articleTitleRegExp = /^(.+?)\n/;
-	var _articleParagraphRegExp = /\n(.+?)(?=\n|$)/g;
+	var _articleParagraphRegExp = /\n(.*?)(?=\n|$)/g;
 	var _articleIdRegExp1 = /\s/g;
 	var _articleIdRegExp2 = /[^a-z-]/g;
 	var _element;
@@ -33,7 +33,7 @@ function Paper() {
 					
 					var content = fileData.rawContent;
 					content = content.replace(_articleTitleRegExp,"<h3>$1</h3>\n")
-					content = content.replace(_articleParagraphRegExp,"\n<p>$1</p>\n")
+					content = content.replace(_articleParagraphRegExp,"\n<p>$1&nbsp</p>\n")
 					
 					fileData.content = "<article id='"+articleId+"'>"+content+"</article>";
 					console.log("  fileData.content: ",fileData.content);
