@@ -201,3 +201,14 @@
 	-ms-column-break-after: avoid; /* Internet Explorer */
 	-o-column-break-after: avoid; /* Opera */
 }
+
+/*
+ * Body
+ */
+#paper #disclaimer {
+	border: 2px solid #000000;
+	padding: 10px;
+}
+#paper #disclaimer p{
+	text-indent: 0;
+}

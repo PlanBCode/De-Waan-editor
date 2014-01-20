@@ -1,8 +1,9 @@
 function Paper() {
 
-	var _articleTitleRegExp = /^(.+?)\n/
-	//var _articleParagraphRegExp = /\n(.+?)[\n$]/g
-	var _articleParagraphRegExp = /\n(.+?)(?=\n|$)/g
+	var _articleTitleRegExp = /^(.+?)\n/;
+	var _articleParagraphRegExp = /\n(.+?)(?=\n|$)/g;
+	var _articleIdRegExp1 = /\s/g;
+	var _articleIdRegExp2 = /[^a-z-]/g;
 	var _element;
 	var _body;
 	var _self = this;
@@ -25,10 +26,16 @@ function Paper() {
 					break;
 				default:
 					//console.log("  fileData.rawContent: ",fileData.rawContent);
+					var articleId = fileData.name;
+					articleId = articleId.toLowerCase();
+					articleId = articleId.replace(_articleIdRegExp1,"-");
+					articleId = articleId.replace(_articleIdRegExp2,"");
+					
 					var content = fileData.rawContent;
 					content = content.replace(_articleTitleRegExp,"<h3>$1</h3>\n")
 					content = content.replace(_articleParagraphRegExp,"\n<p>$1</p>\n")
-					fileData.content = "<article>"+content+"</article>";
+					
+					fileData.content = "<article id='"+articleId+"'>"+content+"</article>";
 					console.log("  fileData.content: ",fileData.content);
 					break;
 			}

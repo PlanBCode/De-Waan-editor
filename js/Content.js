@@ -49,11 +49,20 @@ function Content() {
 		console.log("handleFilesResponse");
 		var filesDir = data.dir;
 		_numFileContentsToLoad = 0;
+		var disclaimerFile;
 		$.each(data.fileNames,function(index,fileName) {
 			var file = getFile(fileName);
 			console.log("  file: ",file);
 			if(!file) {
-				file = addFile(fileName,filesDir);
+				file = createFile(fileName,filesDir);
+				switch(file.name) {
+					case "disclaimer":
+						disclaimerFile = file;
+						break;
+					default:
+						addFile(file);
+						break;
+				}
 			}
 			
 			if(file.type == FileTypes.TEXT) {
@@ -61,6 +70,7 @@ function Content() {
 				loadFileContent(file);
 			}
 		});
+		if(disclaimerFile) addFile(disclaimerFile);
 		
 		// remove all files that don't exist anymore
 		console.log("remove all files that don't exist anymore");
@@ -97,7 +107,7 @@ function Content() {
 		});
 		return foundFile;
 	}
-	function addFile(fileName,filesDir) {
+	function createFile(fileName,filesDir) {
 		console.log("  addFile: ",fileName);
 		var matches = fileName.match(_fileRegExp);
 		var file = new File();
@@ -107,8 +117,10 @@ function Content() {
 		file.extension = matches[2];
 		file.type = getFileType(file.extension);
 		file.enabled = true;
-		_self.files.push(file);
 		return file;
+	}
+	function addFile(file) {
+		_self.files.push(file);
 	}
 	function removeFile(fileName) {
 		console.log("  removeFile: ",fileName);
