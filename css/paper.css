@@ -1,4 +1,22 @@
-/*body*/#paper {
+@font-face {
+    font-family: "Linux Libertine O";
+    src: url("../fonts/LinLibertine_Re-4.7.5.otf");
+}
+@font-face {
+    font-family: "Linux Libertine O";
+    font-weight: bold;
+    src: url("../fonts/LinLibertine_Bd-4.1.5.otf");
+}
+@font-face {
+    font-family: "Linux Libertine O C";
+    src: url("../fonts/LinLibertine_C-4.0.4.otf");
+}
+@font-face {
+    font-family: "League Gothic";
+    src: url("../fonts/LeagueGothic-Regular.otf");
+}
+
+#paper {
 	width: 970px;
 	font-family: "Linux Libertine O"; /*, Times, Times New Roman;*/
 }
@@ -7,7 +25,6 @@
 		/*width: 100%;*/
 	}
 }
-
 
 #paper img { 
 	width: 100%;
