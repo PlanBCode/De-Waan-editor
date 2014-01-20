@@ -14,7 +14,6 @@ function Content() {
 	this.apiURL	 								= "api";
 	
 	this.files 									= new Array();
-	this.filesDir								= "";
 	
 	this.timeoutTime 						= 3000;
 	this.loadIntervalTime				= 3000;
@@ -32,12 +31,13 @@ function Content() {
 		this.apiURL = apiURL;
  	}
 	this.loadFiles = function() {
+		console.log("Content:loadFiles");
 		$.ajax({
 			url: this.apiURL + "/content.php",
 			dataType: 'json',
 			timeout: this.timeoutTime,
 			success: function(response){
-				console.log("  Content:loadContent: ",response); //," response: ",response);
+				console.log("  Content:loadFiles response: ",response); //," response: ",response);
 
 				handleFilesResponse(response.data);
 			}
@@ -46,23 +46,77 @@ function Content() {
 		});
 	}
 	function handleFilesResponse(data) {
-		_self.filesDir = data.dir;
-		_self.files = new Array();
+		console.log("handleFilesResponse");
+		var filesDir = data.dir;
 		_numFileContentsToLoad = 0;
-		$.each(data.fileNames,function(index,value) {
-			var matches = value.match(_fileRegExp);
-			//console.log("matches: ",matches);
-			var file = new File();
-			file.path = _self.filesDir+"/"+value;
-			file.name = matches[1];
-			file.extension = matches[2];
-			file.type = getFileType(file.extension);
-			file.enabled = true;
-			_self.files.push(file);
+		$.each(data.fileNames,function(index,fileName) {
+			var file = getFile(fileName);
+			console.log("  file: ",file);
+			if(!file) {
+				file = addFile(fileName,filesDir);
+			}
 			
 			if(file.type == FileTypes.TEXT) {
 				_numFileContentsToLoad++;
 				loadFileContent(file);
+			}
+		});
+		
+		// remove all files that don't exist anymore
+		console.log("remove all files that don't exist anymore");
+		$.each(_self.files,function(index,file) {
+			//console.log("  file: ",file);
+			if(file) { // check if file still exists
+				console.log("  file.fileName: ",file.fileName);
+				var found = false;
+				$.each(data.fileNames,function(index,fileName) {
+					//console.log("    fileName: ",fileName);
+					if(file.fileName == fileName) {
+						found = true;
+						console.log("    found!");
+						return false;
+					}
+				});
+				if(!found) {
+					removeFile(file.fileName);
+				}
+			}
+		});
+	}
+	function getFile(fileName) {
+		console.log("getFile: ",fileName);
+		//console.log("  _self.files: ",_self.files);
+		var foundFile = false;
+		$.each(_self.files,function(index,file) {
+			//console.log("  file: ",file);
+			//console.log("  file.fileName: ",file.fileName);
+			if(file.fileName == fileName) {
+				foundFile = file;
+				return false;
+			}
+		});
+		return foundFile;
+	}
+	function addFile(fileName,filesDir) {
+		console.log("  addFile: ",fileName);
+		var matches = fileName.match(_fileRegExp);
+		var file = new File();
+		file.fileName = fileName;
+		file.path = filesDir+"/"+fileName;
+		file.name = matches[1];
+		file.extension = matches[2];
+		file.type = getFileType(file.extension);
+		file.enabled = true;
+		_self.files.push(file);
+		return file;
+	}
+	function removeFile(fileName) {
+		console.log("  removeFile: ",fileName);
+		$.each(_self.files,function(index,file) {
+			//console.log("  file: ",file);
+			if(file.fileName == fileName) {
+				_self.files.splice(index,1);
+				return false;
 			}
 		});
 	}
@@ -83,7 +137,7 @@ function Content() {
 			dataType: 'text',
 			timeout: this.timeoutTime,
 			success: function(response){
-				console.log("  Content:loadFileContent: response: ",response); //," response: ",response);
+				//console.log("  Content:loadFileContent: response: ",response);
 
 				file.rawContent = response;
 				_numFileContentsToLoad--;

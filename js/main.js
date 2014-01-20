@@ -12,14 +12,14 @@ $(function() {
   content.init(apiURL);
   editor.init($("#editor"));
   paper.init($("#paper"));
-  $(document).on(Content.FILES_UPDATE,updateFilesList);
+  $(document).on(Content.FILES_UPDATE,onFilesUpdated);
   $(document).on(Editor.UPDATE,update);
   
   content.loadFiles();
 });
 
-function updateFilesList(){
-	console.log("content.files: ",content.files);
+function onFilesUpdated(){
+	console.log("onFilesUpdated");
 	paper.formatFiles(content.files);
 	editor.setFiles(content.files);
 }
