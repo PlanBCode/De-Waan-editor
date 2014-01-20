@@ -105,6 +105,9 @@ function Editor() {
 				selectedFile.enabled = !selectedFile.enabled
 				updateList();
 				break;
+			case 72: // h
+				_element.toggleClass("hidden");
+				break;
 		}
 		return false;
 	}
