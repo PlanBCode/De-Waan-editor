@@ -22,7 +22,7 @@ function Content() {
 	var _numFileContentsToLoad	= 0;
 	var _loadInterval;
 	var _self 									= this;
-
+	
 	// Events
 	Content.FILES_UPDATE 				= "content_filesupdate";
 	
@@ -59,8 +59,12 @@ function Content() {
 					case "disclaimer":
 						disclaimerFile = file;
 						break;
+					case "intro":
+					case "info":
+					case "title":
 					case "header":
-						return; //ignore
+						file.inline = false;
+						addFile(file);
 						break;
 					default:
 						addFile(file);
@@ -76,17 +80,17 @@ function Content() {
 		if(disclaimerFile) addFile(disclaimerFile);
 		
 		// remove all files that don't exist anymore
-		console.log("remove all files that don't exist anymore");
+		///console.log("remove all files that don't exist anymore");
 		$.each(_self.files,function(index,file) {
 			//console.log("  file: ",file);
 			if(file) { // check if file still exists
-				console.log("  file.fileName: ",file.fileName);
+				//console.log("  file.fileName: ",file.fileName);
 				var found = false;
 				$.each(data.fileNames,function(index,fileName) {
 					//console.log("    fileName: ",fileName);
 					if(file.fileName == fileName) {
 						found = true;
-						console.log("    found!");
+						//console.log("    found!");
 						return false;
 					}
 				});
@@ -127,6 +131,7 @@ function Content() {
 		}
 		file.type = getFileType(file.extension);
 		file.enabled = true;
+		file.inline = true;
 		return file;
 	}
 	function addFile(file) {

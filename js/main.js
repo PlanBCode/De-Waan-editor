@@ -22,6 +22,7 @@ $(function() {
 function onFilesUpdated(){
 	console.log("onFilesUpdated");
 	paper.formatFiles(content.files);
+	paper.updateHeader(content.files);
 	editor.setFiles(content.files);
 }
 

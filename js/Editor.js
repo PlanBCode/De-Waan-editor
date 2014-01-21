@@ -28,6 +28,7 @@ function Editor() {
 	function updateList() {
 		_inlineList.empty();
 		$.each(_filesData,function(index,fileData) {
+			if(!fileData.inline) return; // skip 
 			var item = "";
 			switch(fileData.type) {
 				case FileTypes.IMAGE:

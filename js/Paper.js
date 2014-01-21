@@ -6,6 +6,9 @@ function Paper() {
 	var _articleIdRegExp2 = /[^a-z-]/g;
 	var _element;
 	var _body;
+	var _paperIntro;
+	var _paperInfo;
+	var _paperTitle;
 	var _self = this;
 	// Events
 	//Editor.UPDATE = "editor_update";
@@ -14,6 +17,9 @@ function Paper() {
     console.log("Paper:init");
     _element = element;
     _body = _element.find("#body");
+    _paperIntro = _element.find("#intro");
+    _paperInfo = _element.find("#paperinfo");
+    _paperTitle = _element.find("#papertitle");
  	}
 	
 	this.formatFiles = function(filesData) {
@@ -41,15 +47,31 @@ function Paper() {
 			}
 		});
 	}
+	this.updateHeader = function(filesData) {
+		console.log("Paper:updateHeader");
+		$.each(filesData,function(index,fileData) {
+			//console.log("  fileData.name: ",fileData.name);
+			switch(fileData.name) {
+				case "intro":
+					_paperIntro.html("<p>"+fileData.rawContent+"</p>");
+					break;
+				case "info":
+					_paperInfo.html(fileData.rawContent);
+					break;
+				case "title":
+					_paperTitle.html(fileData.rawContent);
+					break;
+			}
+		});
+	}
 	this.update = function(filesData) {
 		console.log("Paper:update");
 		_body.empty();
 		$.each(filesData,function(index,fileData) {
 			if(fileData.enabled) {
 				_body.append(fileData.content);
-				console.log("  appending: ",fileData.name);
+				//console.log("  appending: ",fileData.name);
 			}
 		});
 	}
-		
 }
