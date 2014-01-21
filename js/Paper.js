@@ -28,7 +28,9 @@ function Paper() {
 			var item = "";
 			switch(fileData.type) {
 				case FileTypes.IMAGE:
-					fileData.content = "<img src='"+fileData.path+"' alt='"+fileData.name+"' />"
+					var timestamp = new Date().getTime();
+					var filePath = fileData.path+"?t="+timestamp;
+					fileData.content = "<img src='"+filePath+"' alt='"+fileData.name+"' />"
 					break;
 				default:
 					//console.log("  fileData.rawContent: ",fileData.rawContent);
