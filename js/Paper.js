@@ -9,6 +9,7 @@ function Paper() {
 	var _paperIntro;
 	var _paperInfo;
 	var _paperTitle;
+	var _paperHeader;
 	var _self = this;
 	// Events
 	//Editor.UPDATE = "editor_update";
@@ -20,6 +21,7 @@ function Paper() {
     _paperIntro = _element.find("#intro");
     _paperInfo = _element.find("#paperinfo");
     _paperTitle = _element.find("#papertitle");
+    _paperHeader = _element.find("#paperheader");
  	}
 	
 	this.formatFiles = function(filesData) {
@@ -62,6 +64,11 @@ function Paper() {
 					break;
 				case "title":
 					_paperTitle.html(fileData.rawContent);
+					break;
+				case "header":
+					var timestamp = new Date().getTime();
+					var filePath = fileData.path+"?t="+timestamp;
+					_paperHeader.attr("src",filePath);
 					break;
 			}
 		});
