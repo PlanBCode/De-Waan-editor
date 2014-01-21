@@ -151,6 +151,8 @@ function Content() {
 		switch(extension) {
 			case "png":
 			case "jpg":
+			case "jpeg":
+			case "gif":
 				return FileTypes.IMAGE;
 				break;
 			default:
