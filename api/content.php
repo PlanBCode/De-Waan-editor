@@ -1,11 +1,24 @@
 <?php
+
+	$debug;
 	
 	$fileDir = "content";
-	$dir = opendir("../".$fileDir);
+	$dirPath = "../".$fileDir;
+	$dir = opendir($dirPath);
 	while($fileName = readdir($dir)) { 
-		if (substr($fileName, 0, 1) != ".") { // don't list hidden files
+		$filePath = $dirPath."/".$fileName;
+		if (substr($fileName, 0, 1) != "." && !is_dir($filePath)) { // don't list hidden files
 	    	$fileNames[] = $fileName;
 		}
+
+		// debug:
+		$item = array();
+		$item[] = $fileName;
+		$item[] = is_dir($fileName);
+		$item[] = $filePath;
+		$item[] = is_dir($filePath);
+		$item[] = is_file($fileName);
+		$debug[] = $item;
 	}
 	closedir($dir);
 	$numFiles = count($fileNames);
@@ -19,7 +32,8 @@
 	print("</ol>");*/
 	
 	$data = array( 	"fileNames" => $fileNames,
-					"dir"		=> $fileDir);
+					"dir"		=> $fileDir,
+					"debug"		=> $debug);
 	header('Content-type: application/json');	
 	$response = array( 	"status" => "success",
 						"data" => $data);
