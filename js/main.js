@@ -38,7 +38,6 @@ function onKeyDown(event) {
 			return false;
 			break;
 	}
-	return false;
 }
 function onKeyUp(event) {
 	console.log("main:onKeyUp: ",event.which);
