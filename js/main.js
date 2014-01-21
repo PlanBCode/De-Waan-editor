@@ -8,6 +8,7 @@ $(function() {
   console.log("ready");
 
   $(document).keyup(onKeyUp);
+  $(document).keydown(onKeyDown);
   
   content.init(apiURL);
   editor.init($("#editor"));
@@ -28,6 +29,17 @@ function update(){
 	paper.update(content.files);
 }
 
+function onKeyDown(event) {
+	console.log("main:onKeyDown: ",event.which);
+	switch(event.which) {
+		case 82: // r (prevent page reload (ctrl+r))
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			return false;
+			break;
+	}
+	return false;
+}
 function onKeyUp(event) {
 	console.log("main:onKeyUp: ",event.which);
 	switch(event.which) {
