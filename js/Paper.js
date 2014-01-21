@@ -33,7 +33,7 @@ function Paper() {
 					
 					var content = fileData.rawContent;
 					content = content.replace(_articleTitleRegExp,"<h3>$1</h3>\n")
-					content = content.replace(_articleParagraphRegExp,"\n<p>$1&nbsp</p>\n")
+					content = content.replace(_articleParagraphRegExp,"\n<p>$1</p>\n")
 					
 					fileData.content = "<article id='"+articleId+"'>"+content+"</article>";
 					console.log("  fileData.content: ",fileData.content);
