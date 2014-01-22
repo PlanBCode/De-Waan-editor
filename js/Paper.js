@@ -57,15 +57,19 @@ function Paper() {
 			//console.log("  fileData.name: ",fileData.name);
 			switch(fileData.name) {
 				case "intro":
+				case "*intro":
 					_paperIntro.html("<p>"+fileData.rawContent+"</p>");
 					break;
 				case "info":
+				case "*info":
 					_paperInfo.html(fileData.rawContent);
 					break;
 				case "title":
+				case "*title":
 					_paperTitle.html(fileData.rawContent);
 					break;
 				case "header":
+				case "*header":
 					var timestamp = new Date().getTime();
 					var filePath = fileData.path+"?t="+timestamp;
 					_paperHeader.attr("src",filePath);

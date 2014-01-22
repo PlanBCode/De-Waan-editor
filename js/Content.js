@@ -52,7 +52,7 @@ function Content() {
 		var disclaimerFile;
 		$.each(data.fileNames,function(index,fileName) {
 			var file = getFile(fileName);
-			console.log("  file: ",file);
+			//console.log("  file: ",file);
 			if(!file) {
 				file = createFile(fileName,filesDir);
 				switch(file.name) {
@@ -60,9 +60,13 @@ function Content() {
 						disclaimerFile = file;
 						break;
 					case "intro":
+					case "*intro":
 					case "info":
+					case "*info":
 					case "title":
+					case "*title":
 					case "header":
+					case "*header":
 						file.inline = false;
 						addFile(file);
 						break;
@@ -101,7 +105,7 @@ function Content() {
 		});
 	}
 	function getFile(fileName) {
-		console.log("getFile: ",fileName);
+		//console.log("getFile: ",fileName);
 		//console.log("  _self.files: ",_self.files);
 		var foundFile = false;
 		$.each(_self.files,function(index,file) {
