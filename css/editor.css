@@ -8,7 +8,7 @@
 }
 
 #editor {
-	position: absolute;
+	position: fixed;
 	right: 5px;
 	top: 5px;
 	background: #fff;
