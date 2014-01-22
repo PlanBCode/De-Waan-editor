@@ -118,4 +118,11 @@ function Editor() {
 			return false;
 		}
 	}
+	this.setLoading = function(loading) {
+		if(loading) {
+			_element.addClass("loading");
+		} else {
+			_element.removeClass("loading");
+		}
+	}
 }
