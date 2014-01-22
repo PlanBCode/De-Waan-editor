@@ -34,6 +34,7 @@ function onKeyDown(event) {
 	console.log("main:onKeyDown: ",event.which);
 	switch(event.which) {
 		case 82: // r (prevent page reload (ctrl+r))
+		case 116: // F5 (prevent page reload)
 			event.preventDefault();
 			event.stopImmediatePropagation();
 			return false;
