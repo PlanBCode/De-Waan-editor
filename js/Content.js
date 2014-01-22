@@ -75,7 +75,17 @@ function Content() {
 		updateFileList(_self.inlineFiles,inlineFileNames,filesDir);
 		updateFileList(_self.specialFiles,specialFileNames,filesDir);
 		
-		// ToDo: move disclaimer to end of inlineFiles
+		// Move disclaimer to end of inlineFiles
+		$.each(_self.inlineFiles,function(index,fileData) {
+			switch(fileData.name) {
+				case "disclaimer":
+				case "*disclaimer":
+					removeFile(_self.inlineFiles,fileData.name);
+					addFile(_self.inlineFiles,fileData);
+					break;
+			}
+		});
+		
 	}
 	function updateFileList(list,fileNames,filesDir) {
 		console.log("updateFileList");
