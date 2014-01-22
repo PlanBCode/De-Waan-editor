@@ -14,7 +14,6 @@ function Editor() {
     _element = element;
     _inlineList = _element.find("#inlinecontent .filelist");
     
-    $(document).keyup(onKeyUp);
     $(document).keydown(onKeyDown);
  	}
 	this.setFiles = function(filesData) {
@@ -75,22 +74,7 @@ function Editor() {
 	}
 	function onKeyDown(event) {
 		//console.log("onKeyDown: ",event.which);
-		switch(event.which) {
-			case 32: // space	
-			case 33: // page up
-			case 34: // page down
-			case 35: // end
-			case 36: // home
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				return false;
-				break;
-		}
-	}
-	function onKeyUp(event) {
-		//console.log("Editor:onKeyUp: ",event);
-		event.preventDefault();
-		event.stopImmediatePropagation();
+		var customKey = true; 
 		switch(event.which) {
 			case 32: // space
 				var selectedFile = getFile(_selectedIndex);
@@ -100,10 +84,8 @@ function Editor() {
 			case 33: // page up
 				if(event.ctrlKey) {
 					moveFile(_selectedIndex,_selectedIndex-1);
-					selectFile(_selectedIndex-1);
-				} else {
-					selectFile(_selectedIndex-1);
 				}
+				selectFile(_selectedIndex-1);
 				break;
 			case 34: // page down
 				if(event.ctrlKey) {
@@ -114,10 +96,8 @@ function Editor() {
 			case 36: // home
 				if(event.ctrlKey) {
 					moveFile(_selectedIndex,0);
-					selectFile(0);
-				} else {
-					selectFile(0);
 				}
+				selectFile(0);
 				break;
 			case 35: // end
 				if(event.ctrlKey) {
@@ -128,7 +108,14 @@ function Editor() {
 			case 72: // h
 				_element.toggleClass("hidden");
 				break;
+			default:
+				customKey = false;
+				break;
 		}
-		return false;
+		if(customKey) {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			return false;
+		}
 	}
 }
