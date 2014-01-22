@@ -59,6 +59,11 @@ function Content() {
 			if(extensionPos != -1) {
 				name = fileName.slice(0,extensionPos);
 			}
+			// ignore files starting with an -
+			if(name.charAt(0) == "-") { 
+				return;
+			}
+			
 			// split files into either inline or special files
 			switch(name) {
 				case "intro":
