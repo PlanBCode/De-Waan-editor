@@ -74,12 +74,13 @@ function Editor() {
 		updateList();
 	}
 	function onKeyDown(event) {
+		//console.log("onKeyDown: ",event.which);
 		switch(event.which) {
-			case 38: // up
-			case 40: // down
+			case 32: // space	
 			case 33: // page up
 			case 34: // page down
-			case 32: // space
+			case 35: // end
+			case 36: // home
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				return false;
@@ -87,28 +88,42 @@ function Editor() {
 		}
 	}
 	function onKeyUp(event) {
-		//console.log("Editor:onKeyUp: ",event.which);
+		//console.log("Editor:onKeyUp: ",event);
 		event.preventDefault();
 		event.stopImmediatePropagation();
 		switch(event.which) {
-			case 38: // up
-				selectFile(_selectedIndex-1);
-				break;
-			case 40: // down
-				selectFile(_selectedIndex+1);
-				break;
-			case 33: // page up
-				moveFile(_selectedIndex,_selectedIndex-1);
-				selectFile(_selectedIndex-1);
-				break;
-			case 34: // page down
-				moveFile(_selectedIndex,_selectedIndex+1);
-				selectFile(_selectedIndex+1);
-				break;
 			case 32: // space
 				var selectedFile = getFile(_selectedIndex);
 				selectedFile.enabled = !selectedFile.enabled
 				updateList();
+				break;
+			case 33: // page up
+				if(event.ctrlKey) {
+					moveFile(_selectedIndex,_selectedIndex-1);
+					selectFile(_selectedIndex-1);
+				} else {
+					selectFile(_selectedIndex-1);
+				}
+				break;
+			case 34: // page down
+				if(event.ctrlKey) {
+					moveFile(_selectedIndex,_selectedIndex+1);
+				}
+				selectFile(_selectedIndex+1);
+				break;
+			case 36: // home
+				if(event.ctrlKey) {
+					moveFile(_selectedIndex,0);
+					selectFile(0);
+				} else {
+					selectFile(0);
+				}
+				break;
+			case 35: // end
+				if(event.ctrlKey) {
+					moveFile(_selectedIndex,_filesData.length-1);
+				}
+				selectFile(_filesData.length-1);
 				break;
 			case 72: // h
 				_element.toggleClass("hidden");
