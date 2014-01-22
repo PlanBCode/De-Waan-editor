@@ -77,7 +77,7 @@ function Paper() {
 		console.log("Paper:update");
 		_body.empty();
 		$.each(filesData,function(index,fileData) {
-			if(fileData.enabled) {
+			if(fileData.enabled && fileData.inline) {
 				_body.append(fileData.content);
 				//console.log("  appending: ",fileData.name);
 			}
