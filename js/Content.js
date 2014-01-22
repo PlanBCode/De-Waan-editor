@@ -13,7 +13,8 @@ function Content() {
 
 	this.apiURL	 								= "api";
 	
-	this.files 									= new Array();
+	this.inlineFiles 						= new Array();
+	this.specialFiles 					= new Array();
 	
 	this.timeoutTime 						= 3000;
 	this.loadIntervalTime				= 3000;
@@ -47,68 +48,89 @@ function Content() {
 	}
 	function handleFilesResponse(data) {
 		console.log("handleFilesResponse");
-		var filesDir = data.dir;
-		_numFileContentsToLoad = 0;
-		var disclaimerFile;
+		
+		
+		var inlineFileNames = new Array();
+		var specialFileNames = new Array();
 		$.each(data.fileNames,function(index,fileName) {
-			var file = getFile(fileName);
+			switch(fileName) {
+				case "intro":
+				case "*intro":
+				case "info":
+				case "*info":
+				case "title":
+				case "*title":
+				case "header":
+				case "*header":
+					specialFileNames.push(fileName)
+					break;
+				default:
+					inlineFileNames.push(fileName)
+					break;
+			}
+		});
+		var filesDir = data.dir;
+		
+		self.inlineFiles = new Array();
+		updateFileList(_self.inlineFiles,inlineFileNames,filesDir);
+		updateFileList(_self.specialFiles,specialFileNames,filesDir);
+		
+		// ToDo: move disclaimer to end of inlineFiles
+	}
+	function updateFileList(list,fileNames,filesDir) {
+		console.log("updateFileList");
+		console.log("  list: ",list);
+		console.log("  fileNames: ",fileNames);
+		console.log("  filesDir: ",filesDir);
+		var numFileContentsToLoad = 0;
+		
+		
+		$.each(fileNames,function(index,fileName) {
+			
+			var file = getFile(list,fileName);
 			//console.log("  file: ",file);
+			
 			if(!file) {
 				file = createFile(fileName,filesDir);
-				switch(file.name) {
-					case "disclaimer":
-						disclaimerFile = file;
-						break;
-					case "intro":
-					case "*intro":
-					case "info":
-					case "*info":
-					case "title":
-					case "*title":
-					case "header":
-					case "*header":
-						file.inline = false;
-						addFile(file);
-						break;
-					default:
-						addFile(file);
-						break;
-				}
+				addFile(list,file);
 			}
 			
 			if(file.type == FileTypes.TEXT) {
-				_numFileContentsToLoad++;
-				loadFileContent(file);
-			}
-		});
-		if(disclaimerFile) addFile(disclaimerFile);
-		
-		// remove all files that don't exist anymore
-		///console.log("remove all files that don't exist anymore");
-		$.each(_self.files,function(index,file) {
-			//console.log("  file: ",file);
-			if(file) { // check if file still exists
-				//console.log("  file.fileName: ",file.fileName);
-				var found = false;
-				$.each(data.fileNames,function(index,fileName) {
-					//console.log("    fileName: ",fileName);
-					if(file.fileName == fileName) {
-						found = true;
-						//console.log("    found!");
-						return false;
+				numFileContentsToLoad++;
+				loadFileContent(file,function() {
+					numFileContentsToLoad--;
+					console.log("  numFileContentsToLoad: ",numFileContentsToLoad);
+					if(numFileContentsToLoad == 0) {
+						$(document).trigger(Content.FILES_UPDATE);
 					}
 				});
-				if(!found) {
-					removeFile(file.fileName);
+			}
+		});
+		// remove all files that don't exist anymore
+		///console.log("remove all files that don't exist anymore");
+		$.each(list,function(index,file) {
+			//console.log("  file: ",file);
+			if(!file) return; // check if file still exists
+			//console.log("  file.fileName: ",file.fileName);
+			var found = false;
+			$.each(fileNames,function(index,fileName) {
+				//console.log("    fileName: ",fileName);
+				if(file.fileName == fileName) {
+					found = true;
+					//console.log("    found!");
+					return false;
 				}
+			});
+			if(!found) {
+				removeFile(list, file.fileName);
 			}
 		});
 	}
-	function getFile(fileName) {
-		//console.log("getFile: ",fileName);
-		//console.log("  _self.files: ",_self.files);
+	function getFile(list, fileName) {
+		console.log("getFile: ",fileName);
+		console.log("  list: ",list);
 		var foundFile = false;
-		$.each(_self.files,function(index,file) {
+		$.each(list,function(index,file) {
 			//console.log("  file: ",file);
 			//console.log("  file.fileName: ",file.fileName);
 			if(file.fileName == fileName) {
@@ -135,18 +157,17 @@ function Content() {
 		}
 		file.type = getFileType(file.extension);
 		file.enabled = true;
-		file.inline = true;
 		return file;
 	}
-	function addFile(file) {
-		_self.files.push(file);
+	function addFile(list,file) {
+		list.push(file);
 	}
-	function removeFile(fileName) {
+	function removeFile(list,fileName) {
 		console.log("  removeFile: ",fileName);
-		$.each(_self.files,function(index,file) {
+		$.each(list,function(index,file) {
 			//console.log("  file: ",file);
 			if(file.fileName == fileName) {
-				_self.files.splice(index,1);
+				list.splice(index,1);
 				return false;
 			}
 		});
@@ -164,7 +185,7 @@ function Content() {
 				break;
 		}
 	}
-	function loadFileContent(file) {
+	function loadFileContent(file,completeHandler) {
 		$.ajax({
 			url: file.path,
 			dataType: 'text',
@@ -173,11 +194,7 @@ function Content() {
 				//console.log("  Content:loadFileContent: response: ",response);
 
 				file.rawContent = response;
-				_numFileContentsToLoad--;
-				console.log("  _numFileContentsToLoad: ",_numFileContentsToLoad);
-				if(_numFileContentsToLoad == 0) {
-					$(document).trigger(Content.FILES_UPDATE);
-				}
+				completeHandler();
 			}
 		}).fail(function() {
 				console.log("Content:loadFileContent: failed");

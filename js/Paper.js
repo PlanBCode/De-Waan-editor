@@ -24,7 +24,7 @@ function Paper() {
     _paperHeader = _element.find("#paperheader");
  	}
 	
-	this.formatFiles = function(filesData) {
+	this.formatInlineFiles = function(filesData) {
 		console.log("Paper:formatFiles");
 		$.each(filesData,function(index,fileData) {
 			var item = "";
@@ -81,7 +81,7 @@ function Paper() {
 		console.log("Paper:update");
 		_body.empty();
 		$.each(filesData,function(index,fileData) {
-			if(fileData.enabled && fileData.inline) {
+			if(fileData.enabled) {
 				_body.append(fileData.content);
 				//console.log("  appending: ",fileData.name);
 			}

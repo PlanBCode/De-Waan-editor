@@ -21,17 +21,17 @@ $(function() {
 
 function onFilesUpdated(){
 	console.log("onFilesUpdated");
-	paper.formatFiles(content.files);
-	paper.updateHeader(content.files);
-	editor.setFiles(content.files);
+	paper.formatInlineFiles(content.inlineFiles);
+	paper.updateHeader(content.specialFiles);
+	editor.setFiles(content.inlineFiles);
 }
 
 function update(){
-	paper.update(content.files);
+	paper.update(content.inlineFiles);
 }
 
 function onKeyDown(event) {
-	console.log("main:onKeyDown: ",event.which);
+	//console.log("main:onKeyDown: ",event.which);
 	switch(event.which) {
 		case 82: // r (prevent page reload (ctrl+r))
 		case 116: // F5 (prevent page reload)
@@ -42,7 +42,7 @@ function onKeyDown(event) {
 	}
 }
 function onKeyUp(event) {
-	console.log("main:onKeyUp: ",event.which);
+	//console.log("main:onKeyUp: ",event.which);
 	switch(event.which) {
 		case 82: // r
 			content.loadFiles();

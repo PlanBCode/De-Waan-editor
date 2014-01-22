@@ -1,11 +1,9 @@
 function Editor() {
 
 	var _element; 
-	var _inlineList;
 	var _self = this;
 	
 	var _filesData;
-	
 	var _selectedIndex = 0;
 	
 	// Events
@@ -28,7 +26,6 @@ function Editor() {
 	function updateList() {
 		_inlineList.empty();
 		$.each(_filesData,function(index,fileData) {
-			if(!fileData.inline) return; // skip 
 			var item = "";
 			switch(fileData.type) {
 				case FileTypes.IMAGE:
@@ -44,16 +41,23 @@ function Editor() {
 			checkbox = "<span class='checkbox'>"+checkbox+"</span>";
 			_inlineList.append("<li class='"+classes+"'>"+checkbox+item+"</li>");
 		});
+		
+		selectFile(_selectedIndex);
 		$(document).trigger(Editor.UPDATE);
 	}
 	function selectFile(index) {
-		_selectedIndex = index;
-		if(_selectedIndex < 0) {
-			_selectedIndex = 0;
-		}	else if(_selectedIndex >= _filesData.length) {
-			_selectedIndex = _filesData.length-1;
+		console.log("selectFile: ",selectFile);
+		if(index < 0) {
+			index = 0;
+		}	else if(index >= _filesData.length) {
+			index = _filesData.length-1;
 		}
-		updateList();
+		//console.log("  _inlineList.children(): ",_inlineList.children());
+		
+		$(_inlineList.children()[_selectedIndex]).removeClass("selected");
+		_selectedIndex = index;
+		$(_inlineList.children()[_selectedIndex]).addClass("selected");
+		//updateList();
 	}
 	function getFile(index) {
 		return _filesData[index]
@@ -83,7 +87,7 @@ function Editor() {
 		}
 	}
 	function onKeyUp(event) {
-		console.log("Editor:onKeyUp: ",event.which);
+		//console.log("Editor:onKeyUp: ",event.which);
 		event.preventDefault();
 		event.stopImmediatePropagation();
 		switch(event.which) {
