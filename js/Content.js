@@ -47,13 +47,20 @@ function Content() {
 		});
 	}
 	function handleFilesResponse(data) {
-		console.log("handleFilesResponse");
-		
+		//console.log("handleFilesResponse");
 		
 		var inlineFileNames = new Array();
 		var specialFileNames = new Array();
 		$.each(data.fileNames,function(index,fileName) {
-			switch(fileName) {
+			
+			// extract file name withoud extension
+			var name = fileName;
+			var extensionPos = fileName.lastIndexOf(".");
+			if(extensionPos != -1) {
+				name = fileName.slice(0,extensionPos);
+			}
+			// split files into either inline or special files
+			switch(name) {
 				case "intro":
 				case "*intro":
 				case "info":
@@ -62,6 +69,7 @@ function Content() {
 				case "*title":
 				case "header":
 				case "*header":
+					//console.log("    special file: ",fileName);
 					specialFileNames.push(fileName)
 					break;
 				default:
@@ -89,22 +97,14 @@ function Content() {
 	}
 	function updateFileList(list,fileNames,filesDir) {
 		console.log("updateFileList");
-		console.log("  list: ",list);
-		console.log("  fileNames: ",fileNames);
-		console.log("  filesDir: ",filesDir);
 		var numFileContentsToLoad = 0;
 		
-		
 		$.each(fileNames,function(index,fileName) {
-			
 			var file = getFile(list,fileName);
-			//console.log("  file: ",file);
-			
 			if(!file) {
 				file = createFile(fileName,filesDir);
 				addFile(list,file);
 			}
-			
 			if(file.type == FileTypes.TEXT) {
 				numFileContentsToLoad++;
 				loadFileContent(file,function() {
@@ -119,15 +119,11 @@ function Content() {
 		// remove all files that don't exist anymore
 		///console.log("remove all files that don't exist anymore");
 		$.each(list,function(index,file) {
-			//console.log("  file: ",file);
 			if(!file) return; // check if file still exists
-			//console.log("  file.fileName: ",file.fileName);
 			var found = false;
 			$.each(fileNames,function(index,fileName) {
-				//console.log("    fileName: ",fileName);
 				if(file.fileName == fileName) {
 					found = true;
-					//console.log("    found!");
 					return false;
 				}
 			});
@@ -137,12 +133,9 @@ function Content() {
 		});
 	}
 	function getFile(list, fileName) {
-		console.log("getFile: ",fileName);
-		console.log("  list: ",list);
+		//console.log("getFile: ",fileName);
 		var foundFile = false;
 		$.each(list,function(index,file) {
-			//console.log("  file: ",file);
-			//console.log("  file.fileName: ",file.fileName);
 			if(file.fileName == fileName) {
 				foundFile = file;
 				return false;
@@ -151,7 +144,7 @@ function Content() {
 		return foundFile;
 	}
 	function createFile(fileName,filesDir) {
-		console.log("  addFile: ",fileName);
+		console.log("  createFile: ",fileName);
 		var matches = fileName.match(_fileRegExp);
 		//console.log("  matches: ",matches);
 		
