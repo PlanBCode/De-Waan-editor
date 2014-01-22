@@ -59,8 +59,13 @@ function Content() {
 			if(extensionPos != -1) {
 				name = fileName.slice(0,extensionPos);
 			}
-			// ignore files starting with an -
+			// ignore files starting with an '-'
 			if(name.charAt(0) == "-") { 
+				return;
+			}
+			// warn about files containing a '?'
+			if(name.indexOf("?") != -1) { 
+				alert("Can't load files containing a '?' sign. \nFile '"+fileName+"' is ignored");
 				return;
 			}
 			
