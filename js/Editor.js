@@ -5,6 +5,7 @@ function Editor() {
 	
 	var _filesData;
 	var _selectedIndex = 0;
+	var _enabled;
 	
 	// Events
 	Editor.UPDATE = "editor_update";
@@ -14,7 +15,7 @@ function Editor() {
     _element = element;
     _inlineList = _element.find("#inlinecontent .filelist");
     
-    $(document).keydown(onKeyDown);
+    this.setEnabled(true);
  	}
 	this.setFiles = function(filesData) {
 		_filesData = filesData;
@@ -124,5 +125,20 @@ function Editor() {
 		} else {
 			_element.removeClass("loading");
 		}
+	}
+	this.getEnabled = function() {
+		return _enabled;
+	}
+	this.setEnabled = function(enable) {
+		if(enable == _enabled) return;
+		
+		if(enable) {
+			$(document).keydown(onKeyDown);
+			_element.addClass("selected");
+		} else {
+			$(document).unbind("keydown",onKeyDown);
+			_element.removeClass("selected");
+		}
+		_enabled = enable;
 	}
 }

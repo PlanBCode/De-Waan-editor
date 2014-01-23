@@ -11,6 +11,7 @@ function Paper() {
 	var _paperTitle;
 	var _paperHeader;
 	var _self = this;
+	var _enabled;
 	// Events
 	//Editor.UPDATE = "editor_update";
 	
@@ -22,6 +23,8 @@ function Paper() {
     _paperInfo = _element.find("#paperinfo");
     _paperTitle = _element.find("#papertitle");
     _paperHeader = _element.find("#paperheader");
+    
+    this.setEnabled(false);
  	}
 	
 	this.formatInlineFiles = function(filesData) {
@@ -86,5 +89,19 @@ function Paper() {
 				//console.log("  appending: ",fileData.name);
 			}
 		});
+	}
+	
+	this.getEnabled = function() {
+		return _enabled;
+	}
+	this.setEnabled = function(enable) {
+		if(enable == _enabled) return;
+		
+		if(enable) {
+			_element.addClass("selected");
+		} else {
+			_element.removeClass("selected");
+		}
+		_enabled = enable;
 	}
 }

@@ -36,11 +36,20 @@ function update(){
 }
 
 function onKeyDown(event) {
-	//console.log("main:onKeyDown: ",event.which);
+	console.log("main:onKeyDown: ",event.which);
 	switch(event.which) {
 		case 82: // r (prevent page reload (ctrl+r))
 		case 116: // F5 (prevent page reload)
 			loadFiles();
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			return false;
+			break;
+		case 9: // tab
+			
+			editor.setEnabled(!editor.getEnabled());
+			$("#paper").toggleClass("selected");
+			
 			event.preventDefault();
 			event.stopImmediatePropagation();
 			return false;

@@ -11,11 +11,15 @@
 	position: fixed;
 	right: 5px;
 	top: 5px;
+	bottom: 5px;
+	overflow: auto;
 	background: #fff;
 
 	font-family: "Perfect DOS VGA 437";
-	border: 2px solid #222222;
 	padding: 10px;
+}
+#editor.selected {
+	border: 2px solid #222222;
 }
 #editor.hidden {
 	display:none;
