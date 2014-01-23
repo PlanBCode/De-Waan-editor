@@ -82,28 +82,32 @@ function Editor() {
 				selectedFile.enabled = !selectedFile.enabled
 				updateList();
 				break;
+			case 38: // up
+				selectFile(_selectedIndex-1);
+				break;
+			case 40: // down
+				selectFile(_selectedIndex+1);
+				break;
+			case 37: // left
+				selectFile(0);
+				break;
+			case 39: // right
+				selectFile(_filesData.length-1);
+				break;
 			case 33: // page up
-				if(event.ctrlKey) {
-					moveFile(_selectedIndex,_selectedIndex-1);
-				}
+				moveFile(_selectedIndex,_selectedIndex-1);
 				selectFile(_selectedIndex-1);
 				break;
 			case 34: // page down
-				if(event.ctrlKey) {
-					moveFile(_selectedIndex,_selectedIndex+1);
-				}
+				moveFile(_selectedIndex,_selectedIndex+1);
 				selectFile(_selectedIndex+1);
 				break;
 			case 36: // home
-				if(event.ctrlKey) {
-					moveFile(_selectedIndex,0);
-				}
+				moveFile(_selectedIndex,0);
 				selectFile(0);
 				break;
 			case 35: // end
-				if(event.ctrlKey) {
-					moveFile(_selectedIndex,_filesData.length-1);
-				}
+				moveFile(_selectedIndex,_filesData.length-1);
 				selectFile(_filesData.length-1);
 				break;
 			case 72: // h
